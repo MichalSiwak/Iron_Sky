@@ -1,3 +1,9 @@
+"""
+https://craftpix.net/file-licenses/
+https://dinvstudio.itch.io/dynamic-space-background-lite-free
+http://www.flaticon.com/free-icon/sushi_187463#term=sushi&page=1&position=68
+"""
+
 import random
 import pygame
 import sys
@@ -28,14 +34,18 @@ explosion_animation = [pygame.image.load("img/Explosion1_1.png"), pygame.image.l
                        pygame.image.load("img/Explosion1_9.png"),
                        pygame.image.load("img/Explosion1_10.png")]
 
-emeny_1 =[pygame.image.load("img/Enemy1a.png"), pygame.image.load("img/Enemy1b.png"), pygame.image.load("img/Enemy1c.png"),
-pygame.image.load("img/Enemy1d.png"), pygame.image.load("img/Enemy1e.png")]
+emeny_1 = [pygame.image.load("img/Enemy1a.png"), pygame.image.load("img/Enemy1b.png"),
+           pygame.image.load("img/Enemy1c.png"),
+           pygame.image.load("img/Enemy1d.png"), pygame.image.load("img/Enemy1e.png")]
 
-emeny_2 =[pygame.image.load("img/Enemy2a.png"), pygame.image.load("img/Enemy2b.png"), pygame.image.load("img/Enemy2c.png"),
-pygame.image.load("img/Enemy2d.png"), pygame.image.load("img/Enemy2e.png")]
+emeny_2 = [pygame.image.load("img/Enemy2a.png"), pygame.image.load("img/Enemy2b.png"),
+           pygame.image.load("img/Enemy2c.png"),
+           pygame.image.load("img/Enemy2d.png"), pygame.image.load("img/Enemy2e.png")]
 
-emeny_3 =[pygame.image.load("img/Enemy3a.png"), pygame.image.load("img/Enemy3b.png"), pygame.image.load("img/Enemy3c.png"),
-pygame.image.load("img/Enemy3d.png"), pygame.image.load("img/Enemy3e.png")]
+emeny_3 = [pygame.image.load("img/Enemy3a.png"), pygame.image.load("img/Enemy3b.png"),
+           pygame.image.load("img/Enemy3c.png"),
+           pygame.image.load("img/Enemy3d.png"), pygame.image.load("img/Enemy3e.png")]
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -71,7 +81,6 @@ class Player(pygame.sprite.Sprite):
             if self.rect.y <= 0:
                 self.rect.y = 0
 
-
         if keys[pygame.K_RIGHT] == False and keys[pygame.K_LEFT] == False:
             self.image = pygame.image.load("img/player_1.png")
             self.image = pygame.transform.scale(self.image, (80, 80))
@@ -97,7 +106,7 @@ class Player(pygame.sprite.Sprite):
         pygame.mixer_music.play(0)
 
     def power_shoots_2(self):
-        bullet_l = BulletL(self.rect.x + 26, self.rect.y- 25)
+        bullet_l = BulletL(self.rect.x + 26, self.rect.y - 25)
         all_sprite.add(bullet_l)
         bullets.add(bullet_l)
         bullet_l = BulletML(self.rect.x + 26, self.rect.y - 25)
@@ -116,75 +125,17 @@ class Player(pygame.sprite.Sprite):
         pygame.mixer_music.play(0)
 
 
-class Enemy1(pygame.sprite.Sprite):
-    def __init__(self):
+
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, image, speedy, speedx):
         pygame.sprite.Sprite.__init__(self)
-        self.image = random.choice(emeny_1)
-        self.image = pygame.transform.scale(self.image, (50, 50))
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randint(10, 1200)
-        self.rect.y = enemy_y
-        self.speedy = random.randint(2, 3)
-        self.speedx = random.randint(-5, 5)
-
-    def shoots(self):
-        enemy_bullet = EnemShoots(self.rect.x, self.rect.y)
-        all_sprite.add(enemy_bullet)
-        enemy_bullets.add(enemy_bullet)
-
-    def update(self):
-        self.rect.y += self.speedy
-        self.rect.x += self.speedx
-        if self.rect.y >= 680:
-            self.rect.x = random.randint(10, 1200)
-            self.rect.y = enemy_y
-            self.speedy = random.randint(2, 3)
-            self.speedx = random.randint(-4, 4)
-
-        if self.rect.y == random.randint(0, height):
-            enemy.shoots()
-
-
-class Enemy2(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = random.choice(emeny_2)
+        self.image = image
         self.image = pygame.transform.scale(self.image, (50, 50))
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(12, 1200)
         self.rect.y = enemy_y
-        self.speedy = random.randint(3, 4)
-        self.speedx = random.randint(-3, 3)
-
-    def shoots(self):
-        enemy_bullet = EnemShoots(self.rect.x, self.rect.y)
-        all_sprite.add(enemy_bullet)
-        enemy_bullets.add(enemy_bullet)
-
-
-    def update(self):
-        self.rect.y += self.speedy
-        self.rect.x += self.speedx
-        if self.rect.y >= 680:
-            self.rect.x = random.randint(10, 1200)
-            self.rect.y = -40
-            self.speedy = random.randint(3, 4)
-            self.speedx = random.randint(-3, 3)
-        if self.rect.y == random.randint(0, height):
-            enemy.shoots()
-
-
-
-class Enemy3(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = random.choice(emeny_3)
-        self.image = pygame.transform.scale(self.image, (50, 50))
-        self.rect = self.image.get_rect()
-        self.rect.x = random.randint(12, 1200)
-        self.rect.y = enemy_y
-        self.speedy = random.randint(4, 5)
-        self.speedx = random.randint(-3, 3)
+        self.speedy = speedy
+        self.speedx = speedx
 
     def shoots(self):
         enemy_bullet = EnemShoots(self.rect.x, self.rect.y)
@@ -197,11 +148,10 @@ class Enemy3(pygame.sprite.Sprite):
         if self.rect.y >= 680:
             self.rect.x = random.randint(10, 1200)
             self.rect.y = -40
-            self.speedy = random.randint(4, 5)
-            self.speedx = random.randint(-3, 3)
+            self.speedy = self.speedy
+            self.speedx = self.speedx
         if self.rect.y == random.randint(0, height):
             enemy.shoots()
-
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -321,7 +271,6 @@ class Shields(pygame.sprite.Sprite):
         self.speedy = 3
         self.speedx = 0
 
-
     def update(self):
         self.rect.y += self.speedy
         if self.rect.y >= 900:
@@ -340,7 +289,6 @@ class WeaponUp(pygame.sprite.Sprite):
         self.rect.y = - 400
         self.speedy = 2
         self.speedx = 0
-
 
     def update(self):
         self.rect.y += self.speedy
@@ -368,7 +316,6 @@ class EnemShoots(pygame.sprite.Sprite):
         self.rot_speed = 10
         self.last_update = pygame.time.get_ticks()
 
-
     def update(self):
         self.rect.y += self.speedy
         self.rect.x += self.speedx
@@ -382,6 +329,7 @@ class EnemShoots(pygame.sprite.Sprite):
             self.last_update = now
             self.rot = (self.rot + self.rot_speed) % 360
             self.image = pygame.transform.rotate(self.image_orig, self.rot)
+
 
 def show_go_screen():
     start_game_txt = start_font.render(f'Naciśnij "T" aby rozpocząć nową grę', 1, (255, 255, 255), 'alfa')
@@ -470,9 +418,10 @@ while True:
         shield = 5
         live = 3
         for i in range(8):
-            enemy = random.choice([Enemy1(), Enemy2(), Enemy3()])
+            enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
+                                   Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
+                                   Enemy(random.choice(emeny_3), random.randint(4, 5), random.randint(-3, 3))])
             enemys.add(enemy)
-
 
         shield_up = Shields()
         all_sprite.add(shield_up)
@@ -498,7 +447,9 @@ while True:
         shield = 5
         live = 3
         for i in range(8):
-            enemy = random.choice([Enemy1(), Enemy2(), Enemy3()])
+            enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
+                                   Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
+                                   Enemy(random.choice(emeny_3), random.randint(4, 5), random.randint(-3, 3))])
             enemys.add(enemy)
 
         shield_up = Shields()
@@ -525,7 +476,9 @@ while True:
         shield = 5
         live = live
         for i in range(8):
-            enemy = random.choice([Enemy1(), Enemy2(), Enemy3()])
+            enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
+                                   Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
+                                   Enemy(random.choice(emeny_3), random.randint(4, 5), random.randint(-3, 3))])
             enemys.add(enemy)
 
         shield_up = Shields()
@@ -570,8 +523,9 @@ while True:
                 game_over = True
 
     for hit in hits:
-        # enemy = Enemy1()
-        enemy = random.choice([Enemy1(), Enemy2(), Enemy3()])
+        enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
+                               Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
+                               Enemy(random.choice(emeny_3), random.randint(4, 5), random.randint(-3, 3))])
         all_sprite.add(enemy)
         expl = Explotions(hit.rect.center)
         all_sprite.add(expl)
@@ -588,8 +542,9 @@ while True:
             pygame.mixer_music.play(0)
 
     for hit in hits:
-        # enemy = Enemy1()
-        enemy = random.choice([Enemy1(), Enemy2(), Enemy3()])
+        enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
+                               Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
+                               Enemy(random.choice(emeny_3), random.randint(4, 5), random.randint(-3, 3))])
         expl = Explotions(hit.rect.center)
         all_sprite.add(expl)
         all_sprite.add(enemy)
@@ -614,12 +569,10 @@ while True:
         if power > 2:
             power = 2
 
-
     for hit in hits:
         waepon_up = WeaponUp()
         all_sprite.add(waepon_up)
         waepons.add(waepon_up)
-
 
     hits = pygame.sprite.spritecollide(player, enemy_bullets, True)
     if hits:
@@ -640,7 +593,6 @@ while True:
         for hit in hits:
             expl = Explotions(hit.rect.center)
             all_sprite.add(expl)
-
 
     your_score = font.render(f'Wynik: {score} Panczerz: {shield} Życia: {live}', 1, (255, 255, 255), 'alfa')
     screen_size.blit(your_score, (0, 0))

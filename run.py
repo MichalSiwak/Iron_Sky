@@ -93,10 +93,10 @@ class Player(pygame.sprite.Sprite):
         pygame.mixer_music.play(0)
 
     def power_shoots(self):
-        bullet_l = BulletL(self.rect.x + 26, self.rect.y - 25)
+        bullet_l = Bullet(self.rect.x + 26, self.rect.y - 25, -2)
         all_sprite.add(bullet_l)
         bullets.add(bullet_l)
-        bullet_r = BulletR(self.rect.x + 26, self.rect.y - 25)
+        bullet_r = Bullet(self.rect.x + 26, self.rect.y - 25, 2)
         all_sprite.add(bullet_r)
         bullets.add(bullet_r)
         bullet = Bullet(self.rect.x + 26, self.rect.y - 25)
@@ -106,16 +106,16 @@ class Player(pygame.sprite.Sprite):
         pygame.mixer_music.play(0)
 
     def power_shoots_2(self):
-        bullet_l = BulletL(self.rect.x + 26, self.rect.y - 25)
+        bullet_l = Bullet(self.rect.x + 26, self.rect.y - 25, -2)
         all_sprite.add(bullet_l)
         bullets.add(bullet_l)
-        bullet_l = BulletML(self.rect.x + 26, self.rect.y - 25)
+        bullet_l = Bullet(self.rect.x + 26, self.rect.y - 25, -1)
         all_sprite.add(bullet_l)
         bullets.add(bullet_l)
-        bullet_r = BulletR(self.rect.x + 26, self.rect.y - 25)
+        bullet_r = Bullet(self.rect.x + 26, self.rect.y - 25, 2)
         all_sprite.add(bullet_r)
         bullets.add(bullet_r)
-        bullet_r = BulletMR(self.rect.x + 26, self.rect.y - 25)
+        bullet_r = Bullet(self.rect.x + 26, self.rect.y - 25, 1)
         all_sprite.add(bullet_r)
         bullets.add(bullet_r)
         bullet = Bullet(self.rect.x + 26, self.rect.y - 25)
@@ -123,7 +123,6 @@ class Player(pygame.sprite.Sprite):
         bullets.add(bullet)
         pygame.mixer_music.load("sounds/shoot.wav")
         pygame.mixer_music.play(0)
-
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -155,80 +154,14 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, speedx = 0):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load("img/fire_1.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.speedy = - 8
-
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.x < 0:
-            self.kill()
-
-
-class BulletL(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("img/fire_1.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speedy = -8
-        self.speedx = -2
-
-    def update(self):
-        self.rect.y += self.speedy
-        self.rect.x += self.speedx
-        if self.rect.x < 0:
-            self.kill()
-
-
-class BulletR(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("img/fire_1.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speedy = -8
-        self.speedx = 2
-
-    def update(self):
-        self.rect.y += self.speedy
-        self.rect.x += self.speedx
-        if self.rect.x < 0:
-            self.kill()
-
-
-class BulletML(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("img/fire_1.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speedy = -8
-        self.speedx = -1
-
-    def update(self):
-        self.rect.y += self.speedy
-        self.rect.x += self.speedx
-        if self.rect.x < 0:
-            self.kill()
-
-
-class BulletMR(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("img/fire_1.png")
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.speedy = -8
-        self.speedx = 1
+        self.speedx = speedx
 
     def update(self):
         self.rect.y += self.speedy

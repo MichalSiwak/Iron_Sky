@@ -5,46 +5,9 @@ http://www.flaticon.com/free-icon/sushi_187463#term=sushi&page=1&position=68
 """
 
 import random
-import pygame
 import sys
-
-pygame.init()
-pygame.mixer.init()
-pygame.display.set_caption("Iron Sky")
-
-fps = 60
-width = 1280  # 0
-height = 680  # 0
-fpsClock = pygame.time.Clock()
-font = pygame.font.SysFont('Nimbus Mono L', 40)
-start_font = pygame.font.SysFont('Nimbus Mono L', 60)
-screen = pygame.display.get_surface()
-screen_size = pygame.display.set_mode((width, height))
-backgrounds_img = pygame.image.load("img/backgrounds.png").convert()
-game_over_img = pygame.image.load("img/game_over.png").convert()
-
-player_x = 550
-player_y = 550
-enemy_y = -40
-
-explosion_animation = [pygame.image.load("img/Explosion1_1.png"), pygame.image.load("img/Explosion1_2.png"),
-                       pygame.image.load("img/Explosion1_3.png"), pygame.image.load("img/Explosion1_4.png"),
-                       pygame.image.load("img/Explosion1_5.png"), pygame.image.load("img/Explosion1_6.png"),
-                       pygame.image.load("img/Explosion1_7.png"), pygame.image.load("img/Explosion1_8.png"),
-                       pygame.image.load("img/Explosion1_9.png"),
-                       pygame.image.load("img/Explosion1_10.png")]
-
-emeny_1 = [pygame.image.load("img/Enemy1a.png"), pygame.image.load("img/Enemy1b.png"),
-           pygame.image.load("img/Enemy1c.png"),
-           pygame.image.load("img/Enemy1d.png"), pygame.image.load("img/Enemy1e.png")]
-
-emeny_2 = [pygame.image.load("img/Enemy2a.png"), pygame.image.load("img/Enemy2b.png"),
-           pygame.image.load("img/Enemy2c.png"),
-           pygame.image.load("img/Enemy2d.png"), pygame.image.load("img/Enemy2e.png")]
-
-emeny_3 = [pygame.image.load("img/Enemy3a.png"), pygame.image.load("img/Enemy3b.png"),
-           pygame.image.load("img/Enemy3c.png"),
-           pygame.image.load("img/Enemy3d.png"), pygame.image.load("img/Enemy3e.png")]
+from system import *
+from images import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -137,7 +100,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speedx = speedx
 
     def shoots(self):
-        enemy_bullet = EnemShoots(self.rect.x, self.rect.y)
+        enemy_bullet = EnemyShoots(self.rect.x, self.rect.y)
         all_sprite.add(enemy_bullet)
         enemy_bullets.add(enemy_bullet)
 
@@ -150,6 +113,7 @@ class Enemy(pygame.sprite.Sprite):
             self.speedy = self.speedy
             self.speedx = self.speedx
         if self.rect.y == random.randint(0, height):
+            # enemy.shoots()
             enemy.shoots()
 
 
@@ -232,7 +196,7 @@ class WeaponUp(pygame.sprite.Sprite):
             self.speedx = 0
 
 
-class EnemShoots(pygame.sprite.Sprite):
+class EnemyShoots(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.image_orig = pygame.image.load("img/enemy_bolts.png")
@@ -264,13 +228,7 @@ class EnemShoots(pygame.sprite.Sprite):
             self.image = pygame.transform.rotate(self.image_orig, self.rot)
 
 
-def show_go_screen():
-    start_game_txt = start_font.render(f'Naciśnij "T" aby rozpocząć nową grę', 1, (255, 255, 255), 'alfa')
-    screen_size.blit(start_game_txt, (width / 5, height / 4))
-    pygame.display.flip()
-    game = True
-    pygame.mixer_music.load("sounds/game_sound.wav")
-    pygame.mixer_music.play(0)
+def new_game(game):
     while game:
         fpsClock.tick(fps)
         for event in pygame.event.get():
@@ -282,6 +240,16 @@ def show_go_screen():
                     sys.exit()
                 if event.key == pygame.K_t:
                     game = False
+
+
+def show_go_screen():
+    start_game_txt = start_font.render(f'Naciśnij "T" aby rozpocząć nową grę', 1, (255, 255, 255), 'alfa')
+    screen_size.blit(start_game_txt, (width / 5, height / 4))
+    pygame.display.flip()
+    pygame.mixer_music.load("sounds/game_sound.wav")
+    pygame.mixer_music.play(0)
+    game = True
+    new_game(game)
 
 
 def game_over_screen():
@@ -291,20 +259,10 @@ def game_over_screen():
     end_score = start_font.render(f'Twój wynik: {score}', 1, (255, 255, 255), 'alfa')
     screen_size.blit(end_score, (width / 3, 150))
     pygame.display.flip()
-    game = True
     pygame.mixer_music.load("sounds/game_sound.wav")
     pygame.mixer_music.play(0)
-    while game:
-        fpsClock.tick(fps)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    sys.exit()
-                if event.key == pygame.K_t:
-                    game = False
+    game = True
+    new_game(game)
 
 
 def death_screen():
@@ -329,10 +287,6 @@ def death_screen():
                     death_player = False
 
 
-game_over = False
-start_game = True
-death_player = False
-
 while True:
     screen_size.blit(backgrounds_img, (0, 0))
 
@@ -350,6 +304,7 @@ while True:
         score = 0
         shield = 5
         live = 3
+
         for i in range(8):
             enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
                                    Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
@@ -379,6 +334,7 @@ while True:
         score = 0
         shield = 5
         live = 3
+
         for i in range(8):
             enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
                                    Enemy(random.choice(emeny_2), random.randint(3, 4), random.randint(-3, 3)),
@@ -454,6 +410,7 @@ while True:
             death_player = True
             if live == 0:
                 game_over = True
+
 
     for hit in hits:
         enemy = random.choice([Enemy(random.choice(emeny_1), random.randint(2, 3), random.randint(-4, 4)),
